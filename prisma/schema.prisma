@@ -22,4 +22,19 @@ model User {
   head_pic     String   @default("") @db.VarChar(100)
   create_time  DateTime @default(now())
   updated_time DateTime @updatedAt
+
+  friends friendship[] @relation("user_friend")
+  inverse_friends friendship[] @relation("friend_user")
+}
+
+model friendship {
+  // id           Int      @id @default(autoincrement())
+  user_id      Int
+  friend_id    Int
+  create_time  DateTime @default(now())
+  updated_time DateTime @updatedAt
+
+  user    User    @relation("user_friend", fields: [user_id], references: [id])
+  friend  User    @relation("friend_user",fields: [friend_id], references: [id])
+  @@id([user_id, friend_id])
 }
